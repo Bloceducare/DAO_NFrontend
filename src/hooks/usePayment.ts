@@ -1,6 +1,9 @@
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 
 const config = {
+  meta:{
+    paymentFor:"dao"
+  },
   public_key: process.env.NEXT_PUBLIC_FLW_PUBLIC_KEY as string,
   tx_ref: String(Date.now()),
   currency: "USD",
@@ -13,8 +16,12 @@ const config = {
   },
 };
 
-const usePayment = (cardConfig: { amount: number; customer: { email: string; phone_number: string; name: string; }; }) => {
-  const userCardConfig = { ...config, ...cardConfig };
+const usePayment = (cardConfig: { amount: number; customer: { email: string; phone_number: string; name: string; } ,meta?:object }) => {
+
+  const userCardConfig = { ...config, ...cardConfig,  meta:{
+    ...config.meta,
+    ...cardConfig.meta
+} };
 
   const handlePayment = useFlutterwave(userCardConfig);
 
